@@ -1,0 +1,32 @@
+#define soilMoisturePin A0
+#define relayPin 13
+#define ledPin 2 // Optional LED
+
+int moistureThreshold = 500; // Calibrate this value based on your sensor
+int delayInterval = 2000;
+
+void setup() {
+  pinMode(relayPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+  digitalWrite(relayPin, LOW); // Motor OFF initially
+  digitalWrite(ledPin, LOW);
+}
+
+void loop() {
+  int moistureValue = analogRead(soilMoisturePin);
+  Serial.print("Soil Moisture Reading: ");
+  Serial.println(moistureValue);
+
+  if (moistureValue < moistureThreshold) {
+    digitalWrite(relayPin, HIGH); // Turn ON motor
+    digitalWrite(ledPin, HIGH);   // Turn ON LED
+    Serial.println("Soil is dry → Motor ON");
+  } else {
+    digitalWrite(relayPin, LOW);  // Turn OFF motor
+    digitalWrite(ledPin, LOW);    // Turn OFF LED
+    Serial.println("Soil is wet → Motor OFF");
+  }
+
+  delay(delayInterval);
+}
